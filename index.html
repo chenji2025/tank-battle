@@ -230,6 +230,10 @@ class Bullet {
     ctx.beginPath();
     ctx.arc(this.x + this.w/2, this.y + this.h/2, 4, 0, Math.PI * 2);
     ctx.fill();
+    // Debug hitbox
+    ctx.strokeStyle = this.fromPlayer ? '#ff0' : '#f00';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(this.x, this.y, this.w, this.h);
   }
 }
 
@@ -408,10 +412,9 @@ function update() {
         break;
       }
     }
-    // Player hit
-    if (!b.alive || b.fromPlayer) continue;
-    if (b.owner === player) continue;
-    if (player.invincible <= 0 &&
+    if (!b.alive) continue;
+    // Player hit (enemy bullets only)
+    if (!b.fromPlayer && b.owner !== player && player.invincible <= 0 &&
         rectOverlap(b.x, b.y, b.w, b.h, player.x, player.y, player.w, player.h)) {
       b.alive = false;
       lives--;
@@ -424,13 +427,14 @@ function update() {
         player.y = (ROWS - 2) * TILE + 2;
         player.invincible = 120;
       }
+      continue;
     }
-    // Enemy hit
-    if (!b.alive || !b.fromPlayer) continue;
+    // Enemy hit (player bullets only)
+    if (!b.fromPlayer) continue;
     for (let i = enemies.length - 1; i >= 0; i--) {
       const e = enemies[i];
-      if (b.owner === e) continue;
       if (rectOverlap(b.x, b.y, b.w, b.h, e.x, e.y, e.w, e.h)) {
+        console.log('HIT ENEMY! bullet:', b.x, b.y, 'enemy:', e.x, e.y, e.w, e.h, 'fromPlayer:', b.fromPlayer);
         b.alive = false;
         e.hp--;
         if (e.hp <= 0) {
