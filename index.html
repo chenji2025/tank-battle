@@ -177,9 +177,9 @@ class Tank {
   shoot() {
     if (this.shootCooldown > 0) return;
     this.shootCooldown = this.shootRate;
-    const bx = this.x + this.w/2 + this.dir.x * (this.w/2 + 2);
-    const by = this.y + this.h/2 + this.dir.y * (this.h/2 + 2);
-    bullets.push(new Bullet(bx - 4, by - 4, this.dir, this.isPlayer, this.color));
+    const bx = this.x + this.w/2 + this.dir.x * (this.w/2 + 4);
+    const by = this.y + this.h/2 + this.dir.y * (this.h/2 + 4);
+    bullets.push(new Bullet(bx - 4, by - 4, this.dir, this.isPlayer, this.color, this));
   }
 
   move(dx, dy, walls, tanks) {
@@ -207,7 +207,7 @@ class Tank {
 }
 
 class Bullet {
-  constructor(x, y, dir, fromPlayer, color) {
+  constructor(x, y, dir, fromPlayer, color, owner) {
     this.x = x; this.y = y;
     this.w = 8; this.h = 8;
     this.dir = dir;
@@ -215,6 +215,7 @@ class Bullet {
     this.fromPlayer = fromPlayer;
     this.color = color;
     this.alive = true;
+    this.owner = owner;
   }
 
   update() {
@@ -409,7 +410,8 @@ function update() {
     }
     // Player hit
     if (!b.alive || b.fromPlayer) continue;
-    if (!b.fromPlayer && player.invincible <= 0 &&
+    if (b.owner === player) continue;
+    if (player.invincible <= 0 &&
         rectOverlap(b.x, b.y, b.w, b.h, player.x, player.y, player.w, player.h)) {
       b.alive = false;
       lives--;
@@ -427,6 +429,7 @@ function update() {
     if (!b.alive || !b.fromPlayer) continue;
     for (let i = enemies.length - 1; i >= 0; i--) {
       const e = enemies[i];
+      if (b.owner === e) continue;
       if (rectOverlap(b.x, b.y, b.w, b.h, e.x, e.y, e.w, e.h)) {
         b.alive = false;
         e.hp--;
