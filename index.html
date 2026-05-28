@@ -165,7 +165,7 @@ class Tank {
     this.w = TILE - 4; this.h = TILE - 4;
     this.color = color;
     this.dir = DIR.UP;
-    this.speed = isPlayer ? 3 : 1.5;
+    this.speed = isPlayer ? 2 : 1;
     this.isPlayer = isPlayer;
     this.hp = 1;
     this.shootCooldown = 0;
@@ -211,7 +211,7 @@ class Bullet {
     this.x = x; this.y = y;
     this.w = 8; this.h = 8;
     this.dir = dir;
-    this.speed = 6;
+    this.speed = 4;
     this.fromPlayer = fromPlayer;
     this.color = color;
     this.alive = true;
@@ -419,8 +419,7 @@ function update() {
         state = 'gameover';
         showOverlay('游戏结束', `最终得分: ${score}`);
       } else {
-        player.x = 4 * TILE + 2;
-        player.y = (ROWS - 2) * TILE + 2;
+        loadLevel(level);
         player.invincible = 120;
       }
       continue;
