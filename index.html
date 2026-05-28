@@ -120,33 +120,33 @@ const maps = [
   // Level 2
   [
     "..............",
-    ".BBBB.BB.BBBB.",
+    ".BBBB.BB.BBBB",
     "..............",
-    ".B..B.BB.B..B.",
-    ".B..B.BB.B..B.",
+    ".B..B.BB.B..B",
+    ".B..B.BB.B..B",
     "..............",
     "BBB..BBBB..BBB",
     "..............",
-    ".B..B.BB.B..B.",
-    ".B..B.BB.B..B.",
+    ".B..B.BB.B..B",
+    ".B..B.BB.B..B",
     "..............",
-    ".BBBB.BB.BBBB.",
+    ".BBBB.BB.BBBB",
     ".............."
   ],
   // Level 3
   [
     "..............",
-    ".B.BB.BB.BB.B.",
-    ".B...........B.",
-    ".B.BBB.BBB.B.",
+    ".B.BB.BB.BB.B",
+    ".B..........B",
+    ".B.BBB.BBB.B",
     "..............",
-    "BB.B.BBBB.B.BB",
+    "BB.B.BBBB.B.B",
     "..............",
-    "BB.B.BBBB.B.BB",
+    "BB.B.BBBB.B.B",
     "..............",
-    ".B.BBB.BBB.B.",
-    ".B...........B.",
-    ".B.BB.BB.BB.B.",
+    ".B.BBB.BBB.B",
+    ".B..........B",
+    ".B.BB.BB.BB.B",
     ".............."
   ]
 ];
@@ -230,10 +230,6 @@ class Bullet {
     ctx.beginPath();
     ctx.arc(this.x + this.w/2, this.y + this.h/2, 4, 0, Math.PI * 2);
     ctx.fill();
-    // Debug hitbox
-    ctx.strokeStyle = this.fromPlayer ? '#ff0' : '#f00';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(this.x, this.y, this.w, this.h);
   }
 }
 
@@ -434,7 +430,6 @@ function update() {
     for (let i = enemies.length - 1; i >= 0; i--) {
       const e = enemies[i];
       if (rectOverlap(b.x, b.y, b.w, b.h, e.x, e.y, e.w, e.h)) {
-        console.log('HIT ENEMY! bullet:', b.x, b.y, 'enemy:', e.x, e.y, e.w, e.h, 'fromPlayer:', b.fromPlayer);
         b.alive = false;
         e.hp--;
         if (e.hp <= 0) {
